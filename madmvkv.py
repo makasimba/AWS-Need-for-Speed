@@ -25,10 +25,10 @@ def reward_function(params):
 
     # Calculate optimal path through direction difference between car
     # and next waypoint
-    direction_diff = calculate_direction_difference(waypoints, closest_waypoints, heading)
+    direction_delta = calculate_direction_difference(waypoints, closest_waypoints, heading)
 
     # Reward for closely following waypoints
-    if direction_diff < math.pi/4:
+    if direction_delta < math.pi/4:
         reward += 1
     else:
         reward -= 1
@@ -45,9 +45,9 @@ def reward_function(params):
 
     # Reward for sticking close to the center
     if distance_from_center < (0.1 * track_width):
-        reward += 2
-    elif distance_from_center < (0.2 * track_width):
         reward += 1
+    elif distance_from_center < (0.2 * track_width):
+        reward += 1e-3
     else:
         reward -= 1
 
