@@ -37,7 +37,7 @@ def reward_function(params):
     if speed < 2:
         reward -= 1
     else:
-        reward += (speed / 5) + 1
+        reward += (speed / 5)
 
     # Penalize for steering too much
     if steering > 15:
