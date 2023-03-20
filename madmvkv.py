@@ -1,6 +1,5 @@
 import math
 
-
 def reward_function(params):
     # Read input parameters
     track_width = params['track_width']
@@ -15,13 +14,8 @@ def reward_function(params):
     all_wheels_on_track = params['all_wheels_on_track']
 
     # Initialize reward
-    reward = 1e-3
-
-    # Reward for staying on the track
-    if all_wheels_on_track or not is_offtrack:
-        reward += 1
-    else:
-        reward -= 1
+    # Reward for staying on the track and penalizing for going off track
+    reward = 1 if all_wheels_on_track or not is_offtrack else 1e-3
 
     # Calculate optimal path through direction difference between car
     # and next waypoint
@@ -37,7 +31,7 @@ def reward_function(params):
     if speed < 2:
         reward -= 1
     else:
-        reward += (speed / 5)
+        reward += (speed / 10)
 
     # Penalize for steering too much
     if steering > 15:
@@ -48,9 +42,12 @@ def reward_function(params):
         reward += 1
     elif distance_from_center < (0.2 * track_width):
         reward += 1e-3
+    elif distance_from_center < (0.3 * track_width):
+        reward += 0
     else:
-        reward -= 1
+        reward -= 1e-3
 
+    # Reward for making progress
     return max(float(reward), 0) + (progress / 100.0)
 
 def calculate_direction_difference(waypoints, closest_waypoints, heading):
