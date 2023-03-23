@@ -15,34 +15,31 @@ def reward_function(params):
 
     # Initialize reward
     # Reward for staying on the track and penalizing for going off track
-    reward = 2 if all_wheels_on_track or not is_offtrack else -1
+    reward = 1 if all_wheels_on_track or not is_offtrack else -1
 
     # Calculate optimal path through direction difference between car
     # and next waypoint
     direction_delta = calculate_direction_difference(
         waypoints, closest_waypoints, heading)
 
-    # Reward for closely following waypoints
+    if distance_from_center < (0.3 * track_width):
+        reward += 1
+    
     if direction_delta < (math.pi/8):
         reward += 1
     else:
         reward -= 1e-3
-
-    if distance_from_center < (0.25 * track_width):
-        reward += 1
-
-    # The need-for-speed reward
+    
     if speed > 1:
         reward += (speed / 8.0)
     else:
         reward -= 1e-3
 
-    # Penalize for steering too much
     if steering > 15:
-        reward *= 0.90
+        reward *= 0.80
 
     # For progress
-    return max(float(reward), 0)
+    return max(float(reward), 1e-3)
 
 
 def calculate_direction_difference(waypoints, closest_waypoints, heading):
