@@ -26,22 +26,25 @@ def reward_function(params):
     # Reward for closely following waypoints
     if direction_delta < math.pi/4:
         reward += 1
-    if direction_delta < math.pi/8:
-        reward += 2
     else:
         reward -= 1e-3
 
+    if distance_from_center < (0.2 * track_width):
+        reward += 2
+
     # The need-for-speed reward
     if speed > 0.90:
-        reward += 2
+        reward += 1 + (speed / 5.0)
+    elif speed > 0.95:
+        reward += 2 + (speed / 5.0)
     elif speed > 1.0:
-        reward += 4
+        reward += 3 + (speed / 5.0)
     else:
         reward -= 1
 
     # Penalize for steering too much
     if steering > 15:
-        reward *= 0.75
+        reward *= 0.90
 
     # Reward for making progress
     return max(float(reward), 0)
