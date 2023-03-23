@@ -22,21 +22,23 @@ def reward_function(params):
     direction_delta = calculate_direction_difference(
         waypoints, closest_waypoints, heading)
 
-    if distance_from_center < (0.3 * track_width):
+    if distance_from_center < (0.4 * track_width):
         reward += 1
     
-    if direction_delta < (math.pi/8):
-        reward += 1
+    if direction_delta < (math.pi/12):
+        reward += 2
     else:
         reward -= 1e-3
     
-    if speed > 1:
+    if speed > 0.90:
         reward += (speed / 8.0)
+    elif speed > 1.0:
+        reward += (speed / 4.0)
     else:
         reward -= 1e-3
 
     if steering > 15:
-        reward *= 0.80
+        reward *= 0.90
 
     # For progress
     return max(float(reward), 1e-3)
