@@ -29,7 +29,7 @@ def reward_function(params):
     else:
         reward -= 1e-3
 
-    if distance_from_center < (0.2 * track_width):
+    if distance_from_center < (0.25 * track_width):
         reward += 2
 
     # The need-for-speed reward
